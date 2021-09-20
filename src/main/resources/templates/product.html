@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+          crossorigin="anonymous">
+</head>
+<body>
+<ul class="nav">
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="/">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/products">Products</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/orders/cart">My Cart</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">Login</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link">Customer Service</a>
+    </li>
+</ul>
+
+
+<!--    <span th:text="${product.fullName}"></span>-->
+<!--    <span th:text="${product.fullDescription}"></span>-->
+
+<div class="card mb-3">
+    <img src="..." class="card-img-top" alt="...">
+    <div class="card-body">
+        <h5 class="card-title" th:text="${product.fullName}">Card title</h5>
+        <p class="card-text" th:text="${product.fullDescription}"></p>
+        <p class="card-text" th:text="${product.price}"></p>
+    </div>
+</div>
+
+    <form method="POST" th:action="@{/orders/addProduct/{id}(id = ${product.id})}">
+        <input type="submit" name="addProduct" value="addProduct"/>
+    </form>
+
+<table class="table table-bordered">
+<!--    <thead>-->
+<!--    <tr>-->
+<!--        <th scope="col">#</th>-->
+<!--        <th scope="col">Id</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+    <tbody>
+    <div th:each="attribute : ${product.productAttributes}">
+        <tr>
+            <th scope="col" th:text="${attribute.attributeName}">product id</th>
+            <th scope="col" th:text="${attribute.attributeValue}">product id</th>
+        </tr>
+    </div>
+    </tbody>
+</table>
+
+<div th:each="rating : ${product.ratings}">
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${rating.author}">Author</h5>
+            <h6 class="card-subtitle mb-2 text-muted" th:text="${rating.author}">Authore</h6>
+            <p class="card-text" th:text="${rating.description}">Description</p>
+            <p class="card-text"><small class="text-muted" th:text="${rating.postedOn}">date</small></p>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
