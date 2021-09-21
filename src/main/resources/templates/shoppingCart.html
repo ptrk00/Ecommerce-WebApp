@@ -2,32 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
-        crossorigin="anonymous">
+          rel="stylesheet"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+          crossorigin="anonymous">
+    <title>Title</title>
 </head>
 <body>
 <ul class="nav">
-  <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="/">Home</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/products">Products</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/orders/cart">My Cart</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="#">Login</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link">Customer Service</a>
-  </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="/">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/products">Products</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/orders/cart">My Cart</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/login">Login</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link">Customer Service</a>
+    </li>
 </ul>
 
-<table class="table table-striped table-hover">
+<span th:if="${not #lists.isEmpty(session.shoppingCart)}">
+<table class="table table-striped table-hover" style="width:40%; margin: auto; padding-top: 100px">
   <thead>
   <tr>
     <th scope="col">#</th>
@@ -49,10 +50,15 @@
     </div>
   </tbody>
 </table>
-
   <form method="GET" th:action="@{/orders}">
-    <input type="submit" name="addOrder" value="addOrder"/>
+      <button type="submit" class="btn btn-primary mb-3" style="display: block;margin-top: 50px; margin-left: 45%">Place an order</button>
   </form>
+</span>
+
+<span th:unless="${not #lists.isEmpty(session.shoppingCart)}">
+    <p>No products in cart</p>
+</span>
+
 
 </body>
 </html>

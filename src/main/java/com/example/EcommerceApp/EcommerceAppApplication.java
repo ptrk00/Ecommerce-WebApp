@@ -34,7 +34,8 @@ public class EcommerceAppApplication {
 						"Cn-121212"),
 				"Elegant and powerful gaming laptop. Has very cool" +
 						"screen.",
-				"long description");
+				"long description",
+				"1_laptop.jpg");
 
 		List<ProductRating> productRatingList = List.of(new ProductRating(product,
 				4,
@@ -55,7 +56,7 @@ public class EcommerceAppApplication {
 						"Cn-121212"),
 				"Headphones with really loud bass. Your " +
 						" neighbours can listen with you ",
-				"long description"),
+				"long description", "2_head_phones.jpg"),
 				new Product("Random ancient statue",
 						9990.0,
 						new SellerDetails("DefinitelyNoScam",
@@ -63,7 +64,7 @@ public class EcommerceAppApplication {
 								"Cn-121212"),
 						"I have just found it in my garden lol, but" +
 								"if definitely belongs to some ancient greeks or something",
-						"long description"),
+						"long description", "3_statue.jpg"),
 				new Product("A math book ",
 						50.0,
 						new SellerDetails("Math big brainzz 2012 IV edition",
@@ -71,15 +72,15 @@ public class EcommerceAppApplication {
 								"Cn-121212"),
 						"Learn algebra, calculus and some" +
 								"other strange stuff",
-						"long description"),
-				new Product("Sport shoos. Good for jumping",
+						"long description", "5_book.jpg"),
+				new Product("Sport shoes. Good for jumping",
 						230.0,
 						new SellerDetails("BootsAndGoods",
 								"Sweden",
 								"Cn-121212"),
 						"You can not only walk in those" +
 								"boots bu also you can jump! That's unbelievable!",
-						"long description"));
+						"long description", "4_shoes.jpg"));
 
 		return args -> {
 			Product p = productRepository.save(product);

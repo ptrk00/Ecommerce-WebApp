@@ -2,21 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+          crossorigin="anonymous">
+
+    <title>Register</title>
 </head>
 <body>
-<form method="POST" th:action="@{/register}" id="registrationDetails">
 
-    <label for="username">Username: </label>
-    <input type="text" name="username"/><br/>
+<ul class="nav">
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="/">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/products">Products</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/orders/cart">My Cart</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/login">Login</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link">Customer Service</a>
+    </li>
+</ul>
 
-    <label for="password">Password: </label>
-    <input type="password" name="password"/><br/>
+<form method="POST" th:action="@{/register}" id="registrationDetails" style="width: 30%; margin: auto; padding-top: 100px">
 
-    <label for="email">Password: </label>
-    <input type="email" name="email"/><br/>
+    <div class="mb-3 row">
+        <label for="username" class="col-sm-2 col-form-label">Username: </label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="username" name="username">
+        </div>
+    </div>
 
-    <input type="submit" value="Register"/>
+    <div class="mb-3 row">
+        <label for="password" class="col-sm-2 col-form-label">Password: </label>
+        <div class="col-sm-10">
+            <input type="password" class="form-control" id="password" name="password">
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="email" placeholder="name@example.com" name="email">
+    </div>
+
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary mb-3" style="display: block; margin: 0 auto; width: 30%">Register</button>
+    </div>
 
 </form>
 </body>

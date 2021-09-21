@@ -1,6 +1,7 @@
 package com.example.EcommerceApp.product.model;
 
 import lombok.*;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -28,6 +29,20 @@ public class Product {
         this.fullDescription = fullDescription;
         this.ratings = ratings;
         this.productAttributes = productAttributes;
+    }
+
+    public Product(String fullName,
+                   Double price,
+                   SellerDetails sellerDetails,
+                   String shortDescription,
+                   String fullDescription,
+                   String imagePath) {
+        this.fullName = fullName;
+        this.price = price;
+        this.sellerDetails = sellerDetails;
+        this.shortDescription = shortDescription;
+        this.fullDescription = fullDescription;
+        this.imagePath = imagePath;
     }
 
     public Product(String fullName,
@@ -66,6 +81,9 @@ public class Product {
     @Size(max=300, message = "Products description must be less or equal to 300 characters")
     @NotBlank
     String fullDescription;
+
+    @Nullable
+    String imagePath;
 
     @ToString.Exclude // prevent circular dependency
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL)
