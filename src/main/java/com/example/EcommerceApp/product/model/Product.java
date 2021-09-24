@@ -45,6 +45,18 @@ public class Product {
         this.imagePath = imagePath;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj)
+            return true;
+        if(obj == null)
+            return false;
+        if(getClass() != obj.getClass())
+            return false;
+        Product other = (Product) obj;
+        return id.equals(other.id);
+    }
+
     public Product(String fullName,
                    Double price,
                    SellerDetails sellerDetails,
@@ -57,6 +69,8 @@ public class Product {
         this.shortDescription = shortDescription;
         this.fullDescription = fullDescription;
     }
+
+
 
     public Product() {
     }

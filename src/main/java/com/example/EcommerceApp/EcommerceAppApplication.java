@@ -4,18 +4,14 @@ import com.example.EcommerceApp.product.model.Product;
 import com.example.EcommerceApp.product.model.ProductAttribute;
 import com.example.EcommerceApp.product.model.ProductRating;
 import com.example.EcommerceApp.product.model.SellerDetails;
-import com.example.EcommerceApp.product.repository.ProductAttributeRepository;
 import com.example.EcommerceApp.product.repository.ProductRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @SpringBootApplication
 public class EcommerceAppApplication {

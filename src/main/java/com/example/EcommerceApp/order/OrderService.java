@@ -4,34 +4,21 @@ import com.example.EcommerceApp.product.model.Product;
 import com.example.EcommerceApp.product.service.ProductService;
 import com.example.EcommerceApp.security.model.User;
 import com.example.EcommerceApp.security.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class OrderService {
-
-//    private final OrderRepository orderRepository;
-//    private final ProductService productService;
-//
-//    public OrderService(OrderRepository orderRepository, ProductService productService) {
-//        this.orderRepository = orderRepository;
-//        this.productService = productService;
-//    }
 
     private final OrderRepository orderRepository;
     private final ProductService productService;
     private final UserRepository userRepository;
 
-//
-//    @PersistenceContext
-//    @Autowired
-//    private EntityManager entityManager;
 
     public OrderService(OrderRepository orderRepository, ProductService productService,
                         UserRepository userRepository) {
@@ -40,19 +27,13 @@ public class OrderService {
         this.userRepository = userRepository;
     }
 
-    public void registerOrder(ProductOrder order, User user) {
-
-        user = userRepository.findByUsername(user.getUsername());
-        user.addOrder(order);
-
-     //   entityManager.merge(user);
-    //    user.addOrder(order);
-
-        orderRepository.save(order);
-    }
-
     @Transactional
-    public void registerOrderTransactional(ProductOrder order, List<Product> productList, User user) {
+    public void registerOrder(ProductOrder order, List<Product> productList, User user) {
+
+        // product list cannot be empty
+
+        if(productList.isEmpty())
+            throw new OrderWithEmptyCartException("Order must contain at least one product");
 
         order.setProducts(productList);
         order.setUser(user);
@@ -61,7 +42,23 @@ public class OrderService {
 
     }
 
-    public Optional<Product> findProduct(Long id) {
+    public Product addProductToCart(Long id, List<Product> productList) {
+
+        Product product = findProduct(id);
+
+        // if product with given id is already present in cart
+
+        if(productList.contains(product))
+            throw new ProductAlreadyPresentInCart("Product with id " + id + " is already present in the cart");
+
+        productList.add(product);
+        log.info("Added " + product + " to the cart");
+
+        return product;
+
+    }
+
+    public Product findProduct(Long id) {
         return productService.findProduct(id);
     }
 

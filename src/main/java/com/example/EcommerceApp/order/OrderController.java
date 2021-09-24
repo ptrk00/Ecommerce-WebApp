@@ -4,7 +4,6 @@ import com.example.EcommerceApp.product.model.Product;
 import com.example.EcommerceApp.security.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,12 +11,9 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/orders")
@@ -50,12 +46,13 @@ public class OrderController {
     String addProductToCart(@PathVariable Long id,
                                     @ModelAttribute(name = "shoppingCart") List<Product> productList,
                                     Model model) {
-        Optional<Product> product = orderService.findProduct(id);
-        product.ifPresent(productList::add);
-        log.info("Added " + product.get() + " to the cart");
-//        String referer = request.getParameter("Referer");
-//        return "redirect:" + referer;
-        model.addAttribute("product",product.get());
+//        Optional<Product> product = orderService.findProduct(id);
+//        product.ifPresent(productList::add);
+//        log.info("Added " + product.get() + " to the cart");
+//        model.addAttribute("product",product.get());
+        log.info("Received POST request to orders/addProduct/" + id);
+        var product = orderService.addProductToCart(id,productList);
+        model.addAttribute("product",product);
         return "product";
     }
 
@@ -66,20 +63,44 @@ public class OrderController {
                       SessionStatus sessionStatus,
                       @AuthenticationPrincipal User user) {
 
+        log.info("Received POST request to /orders");
+
         if(errors.hasErrors()) {
             return "order";
         }
-//
-//        order.setProducts(productList);
-//        order.setUser(user);
-//
-//        orderService.registerOrder(order,user);
-        orderService.registerOrderTransactional(order,productList,user);
 
-        sessionStatus.setComplete();
+        orderService.registerOrder(order,productList,user);
+
         log.info("User " + user +" has placed an order " + order);
 
+        // session now should be closed
+        sessionStatus.setComplete();
+
         return "home";
+    }
+
+
+    // this should probably be in the product controller
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleProductNotFoundException(ProductNotFoundException e, Model model) {
+        model.addAttribute("errorMsg",e.getMessage());
+        return "exception";
+    }
+
+    @ExceptionHandler(ProductAlreadyPresentInCart.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public String handleProductAlreadyPresentInCart(ProductAlreadyPresentInCart e, Model model) {
+        model.addAttribute("errorMsg",e.getMessage());
+        return "exception";
+    }
+
+    @ExceptionHandler(OrderWithEmptyCartException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public String handleOrderWithEmptyCartException(ProductNotFoundException e, Model model) {
+        model.addAttribute("errorMsg", e.getMessage());
+        return "exception";
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.EcommerceApp.product.service;
 
+import com.example.EcommerceApp.order.ProductNotFoundException;
 import com.example.EcommerceApp.product.model.Product;
 import com.example.EcommerceApp.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -17,19 +18,14 @@ public class ProductService {
     }
 
     public Iterable<Product> findAllProducts() {
-
-        Iterable<Product> products = productRepository.findAll();
-
-//        products.forEach(p -> System.out.println(p.getRatings()));
-//        products.forEach(p -> System.out.println(p.getProductAttributes()));
-
-
-        return products;
-        // return productRepository.findAll();
+        return productRepository.findAll();
     }
 
-    public Optional<Product> findProduct(Long id) {
-        return productRepository.findById(id);
+    public Product findProduct(Long id) {
+        Optional<Product> optProduct = productRepository.findById(id);
+        if(optProduct.isEmpty())
+            throw new ProductNotFoundException("Product with id " + id + " has not been found");
+        return optProduct.get();
     }
 
 }

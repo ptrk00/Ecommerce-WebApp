@@ -1,26 +1,23 @@
 package com.example.EcommerceApp.security.controller;
 
+import com.example.EcommerceApp.security.exceptions.UserFieldNotUniqueException;
 import com.example.EcommerceApp.security.model.RegistrationDetails;
-import com.example.EcommerceApp.security.repository.UserRepository;
+import com.example.EcommerceApp.security.service.RegistrationService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/register")
 @Slf4j
+@RequiredArgsConstructor
 public class RegistrationController {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public RegistrationController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    private final RegistrationService registrationService;
 
     @GetMapping
     public String register() {
@@ -29,10 +26,16 @@ public class RegistrationController {
 
     @PostMapping
     public String processRegistration(RegistrationDetails registrationDetails) {
-        userRepository.save(registrationDetails.toUser(passwordEncoder));
+        registrationService.registerUser(registrationDetails);
         log.info("Registered user " + registrationDetails);
         return "redirect:/login";
     }
 
+    @ExceptionHandler(UserFieldNotUniqueException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public String handleUserFieldNotUniqueException(UserFieldNotUniqueException e, Model model) {
+        model.addAttribute("errorMsg", e.getMessage());
+        return "exception";
+    }
 
 }
