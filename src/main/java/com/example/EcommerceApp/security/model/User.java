@@ -13,6 +13,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -47,6 +48,7 @@ public class User implements UserDetails {
         this.username = username;
         this.password = password;
         this.email = email;
+        productOrders = new LinkedList<>();
     }
 
     @Override

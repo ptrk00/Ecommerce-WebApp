@@ -46,10 +46,6 @@ public class OrderController {
     String addProductToCart(@PathVariable Long id,
                                     @ModelAttribute(name = "shoppingCart") List<Product> productList,
                                     Model model) {
-//        Optional<Product> product = orderService.findProduct(id);
-//        product.ifPresent(productList::add);
-//        log.info("Added " + product.get() + " to the cart");
-//        model.addAttribute("product",product.get());
         log.info("Received POST request to orders/addProduct/" + id);
         var product = orderService.addProductToCart(id,productList);
         model.addAttribute("product",product);

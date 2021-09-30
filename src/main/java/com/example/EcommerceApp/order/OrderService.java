@@ -6,6 +6,7 @@ import com.example.EcommerceApp.security.model.User;
 import com.example.EcommerceApp.security.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -13,18 +14,16 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+//@Validated
 public class OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductService productService;
-    private final UserRepository userRepository;
 
 
-    public OrderService(OrderRepository orderRepository, ProductService productService,
-                        UserRepository userRepository) {
+    public OrderService(OrderRepository orderRepository, ProductService productService) {
         this.orderRepository = orderRepository;
         this.productService = productService;
-        this.userRepository = userRepository;
     }
 
     @Transactional

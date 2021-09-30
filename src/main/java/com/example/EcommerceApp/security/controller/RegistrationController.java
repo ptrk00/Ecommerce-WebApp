@@ -8,7 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/register")
@@ -25,7 +28,12 @@ public class RegistrationController {
     }
 
     @PostMapping
-    public String processRegistration(RegistrationDetails registrationDetails) {
+    public String processRegistration(@Valid RegistrationDetails registrationDetails,
+                                      Errors errors) {
+        if(errors.hasErrors()) {
+            return "/register";
+        }
+
         registrationService.registerUser(registrationDetails);
         log.info("Registered user " + registrationDetails);
         return "redirect:/login";

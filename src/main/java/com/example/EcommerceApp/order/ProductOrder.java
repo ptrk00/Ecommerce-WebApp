@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +22,15 @@ import java.util.List;
 @Data
 public class ProductOrder {
 
+    public ProductOrder() {
+    }
+
+    public ProductOrder(List<Product> products, ClientData clientData, User user) {
+        this.products = products;
+        this.clientData = clientData;
+        this.user = user;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -33,6 +43,7 @@ public class ProductOrder {
     private Date orderDate;
 
     @Embedded
+    @Valid
     private ClientData clientData;
 
     @ToString.Exclude
@@ -40,7 +51,7 @@ public class ProductOrder {
     private User user;
 
     @PrePersist
-    public void setDate() {
+    private void setDate() {
         orderDate = new Date();
     }
 
