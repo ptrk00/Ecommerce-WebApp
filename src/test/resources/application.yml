@@ -1,5 +1,15 @@
 spring:
+
+  profiles:
+    active: test
+
   h2:
     console:
       enabled: true
+  jpa:
+    show-sql: true
+  flyway:
+    enabled: false
 
+  main:
+    allow-bean-definition-overriding: true

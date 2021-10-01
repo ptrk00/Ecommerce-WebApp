@@ -6,6 +6,10 @@ spring:
     hibernate:
       ddl-auto: update
 
+# flyway is configured in FlywayConfiguration class
+  flyway:
+    enabled: false
+
   datasource:
     url: jdbc:mysql://localhost:3306/ecommerce
     username: usr

@@ -40,11 +40,6 @@ class RegistrationControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    // TODO: remove it as soon as dataLoader bean is removed from main class
-
-    @MockBean
-    ProductRepository productRepository;
-
 
     @Test
     public void should_register_user() throws Exception {
