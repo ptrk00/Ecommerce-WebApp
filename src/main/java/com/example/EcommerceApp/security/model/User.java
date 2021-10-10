@@ -1,10 +1,13 @@
 package com.example.EcommerceApp.security.model;
 
 import com.example.EcommerceApp.order.ProductOrder;
+import com.example.EcommerceApp.product.model.Product;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,9 +39,17 @@ public class User implements UserDetails {
     @Email
     private String email;
 
+    // TODO: fix EAGER fetch type
+
     @ToString.Exclude
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<ProductOrder> productOrders;
+
+    @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
+    private List<Product> offers;
+
+    public void addOffer(Product product) {offers.add(product);}
 
     public void addOrder(ProductOrder order) {
         productOrders.add(order);
@@ -49,6 +60,7 @@ public class User implements UserDetails {
         this.password = password;
         this.email = email;
         productOrders = new LinkedList<>();
+        offers = new LinkedList<>();
     }
 
     @Override

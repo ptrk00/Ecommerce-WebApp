@@ -30,7 +30,6 @@ public class ProductRating {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     Product product;
@@ -41,7 +40,6 @@ public class ProductRating {
     @Size(min = 10, max = 100, message = "Description should be minimum 10 characters and maximum 100 characters")
     String description;
 
-    @NotBlank
     String author;
 
     Date postedOn;

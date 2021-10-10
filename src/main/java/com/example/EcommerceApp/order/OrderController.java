@@ -1,6 +1,8 @@
 package com.example.EcommerceApp.order;
 
+import com.example.EcommerceApp.product.model.CannotBuyOwnProductException;
 import com.example.EcommerceApp.product.model.Product;
+import com.example.EcommerceApp.product.model.ProductRating;
 import com.example.EcommerceApp.security.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -49,6 +51,7 @@ public class OrderController {
         log.info("Received POST request to orders/addProduct/" + id);
         var product = orderService.addProductToCart(id,productList);
         model.addAttribute("product",product);
+        model.addAttribute("newRating",new ProductRating());
         return "product";
     }
 
@@ -65,6 +68,7 @@ public class OrderController {
             return "order";
         }
 
+        orderService.validateProductList(productList,user);
         orderService.registerOrder(order,productList,user);
 
         log.info("User " + user +" has placed an order " + order);
@@ -95,6 +99,13 @@ public class OrderController {
     @ExceptionHandler(OrderWithEmptyCartException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public String handleOrderWithEmptyCartException(ProductNotFoundException e, Model model) {
+        model.addAttribute("errorMsg", e.getMessage());
+        return "exception";
+    }
+
+    @ExceptionHandler(CannotBuyOwnProductException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public String handleCannotBuyOwnProductException(CannotBuyOwnProductException e, Model model) {
         model.addAttribute("errorMsg", e.getMessage());
         return "exception";
     }

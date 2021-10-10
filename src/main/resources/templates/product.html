@@ -36,6 +36,32 @@
     </tbody>
 </table>
 
+<p>
+    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        Add comment
+    </button>
+</p>
+
+<div class="collapse" id="collapseExample">
+    <div class="card card-body">
+        <form th:action="@{/products/{id}/rating(id = ${product.id})}" method="post" th:object="${newRating}">
+            <select class="form-select" aria-label="Default select example" name="starNum">
+                <option selected>Rate Product</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+                <option value="4">Four</option>
+                <option value="5">Five</option>
+            </select>
+            <div class="mb-3">
+                <label for="comment" class="form-label">Write your comment below</label>
+                <textarea class="form-control" id="comment" name="description" rows="3" th:field="${newRating.description}"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
 <div th:each="rating : ${product.ratings}" style="margin-left: 40%; margin-top: 50px">
     <div class="card" style="width: 18rem;">
         <div class="card-body">

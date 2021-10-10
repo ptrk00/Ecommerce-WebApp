@@ -1,6 +1,7 @@
 package com.example.EcommerceApp.security.controller;
 
 import com.example.EcommerceApp.order.ProductOrder;
+import com.example.EcommerceApp.product.model.Product;
 import com.example.EcommerceApp.security.model.User;
 import com.example.EcommerceApp.security.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,9 @@ public class UserController {
     @GetMapping("/orders")
     public String getUserOrders(@AuthenticationPrincipal User user, Model model) {
 
+        // TODO: this is not needed but lazily load bla bla ....
         List<ProductOrder> userOrders = userService.getUserOrders(user);
+        model.addAttribute("offers", user.getOffers());
         model.addAttribute("orders",userOrders);
         return "userOrders";
     }

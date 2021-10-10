@@ -7,6 +7,7 @@
 </head>
 <body>
 <div th:insert="fragments/navbar :: navbar"></div>
+<p>ordered products</p>
 <div th:each="order, iter : ${orders}">
     <table class="table table-striped table-hover" style="width:40%; margin: auto; padding-top: 100px">
         <thead>
@@ -20,15 +21,36 @@
     <tbody>
         <div th:each="product, iter : ${order.products}">
             <tr>
-                <th scope="col" th:text="${iter.index}">#</th>
-                <th scope="col" th:text="${product.id}">product id</th>
-                <th scope="col" th:text="${product.fullName}">name</th>
-                <th scope="col" th:text="${product.sellerDetails.companyName}">short description}</th>
-                <th scope="col" th:text="${product.price}">price</th>
+                <td th:text="${iter.index}">#</td>
+                <td th:text="${product.id}">product id</td>
+                <td th:text="${product.fullName}">name</td>
+                <td th:text="${product.sellerDetails.companyName}">short description}</td>
+                <td th:text="${product.price}">price</td>
             </tr>
         </div>
     </tbody>
     </table>
 </div>
+
+<p>offered products</p>
+
+<table class="table table-striped table-hover" style="width:40%; margin: auto; padding-top: 100px"><thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Price</th>
+    </tr>
+    <tbody>
+        <div th:each="offer, iter : ${offers}">
+            <tr>
+                <td th:text="${iter.index}">#</td>
+                <td th:text="${offer.id}">product id</td>
+                <td th:text="${offer.fullName}">name</td>
+                <td th:text="${offer.price}">price</td>
+            </tr>
+        </div>
+    </tbody>
+</table>
 </body>
 </html>

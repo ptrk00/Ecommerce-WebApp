@@ -13,6 +13,8 @@ import javax.sql.DataSource;
 @Profile("!test")
 public class FlywayConfiguration {
 
+    // TODO: hibernate_sequence value is not updated
+
     @Autowired
     public FlywayConfiguration(DataSource dataSource) {
         Flyway.configure().baselineOnMigrate(true).dataSource(dataSource).load().migrate();

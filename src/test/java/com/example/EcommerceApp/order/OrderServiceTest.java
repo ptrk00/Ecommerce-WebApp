@@ -1,5 +1,6 @@
 package com.example.EcommerceApp.order;
 
+import com.example.EcommerceApp.product.model.CannotBuyOwnProductException;
 import com.example.EcommerceApp.product.model.Product;
 import com.example.EcommerceApp.product.service.ProductService;
 import com.example.EcommerceApp.security.model.User;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.parameters.P;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -136,6 +138,34 @@ class OrderServiceTest {
         // then
 
         assertThat(products).contains(newProduct);
+
+    }
+
+    @Test
+    public void should_throw_when_trying_to_buy_own_product() {
+
+        // given
+
+        Product product1 = new Product();
+        product1.setId(1L);
+        product1.setFullName("product1");
+
+        Product product2 = new Product();
+        product2.setId(2L);
+        product2.setFullName("product2");
+
+        List<Product> cart = List.of(product1,product2);
+        List<Product> own = List.of(product1);
+
+        User user = new User("usrnme","passwd","em@em.em");
+
+        when(productService.findByUser(user)).thenReturn(own);
+
+        // when
+
+        assertThatThrownBy(() -> {
+            orderService.validateProductList(cart,user);
+        }).isInstanceOf(CannotBuyOwnProductException.class).hasMessageContaining(Long.toString(product1.getId()));
 
     }
 

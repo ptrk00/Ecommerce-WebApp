@@ -123,8 +123,6 @@ class OrderControllerTest {
                 .andExpect(MockMvcResultMatchers.view().name("home"));
     }
 
-    // TODO: test validation
-
 
     @Test
     @WithMockUser

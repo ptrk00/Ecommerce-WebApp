@@ -1,5 +1,6 @@
 package com.example.EcommerceApp.product.model;
 
+import com.example.EcommerceApp.security.model.User;
 import lombok.*;
 import org.springframework.lang.Nullable;
 
@@ -7,9 +8,13 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 // TODO: provide a builder
+// TODO: Product should have an Boolean available field
+// TODO: remove product attribute class
 @Entity
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -73,6 +78,8 @@ public class Product {
 
 
     public Product() {
+        this.ratings = new LinkedList<>();
+        this.productAttributes = new LinkedList<>();
     }
 
     @Id
@@ -107,5 +114,18 @@ public class Product {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL)
     List<ProductAttribute> productAttributes;
 
+    @ToString.Exclude
+    @ManyToOne
+    User seller;
+
+    public void addRating(ProductRating rating) {
+        ratings.add(rating);
+    }
+
+    // does not work somehow ...
+//    @PostPersist
+//    private void setImgPath() {
+//        imagePath = id + "_" + fullName;
+//    }
 
 }

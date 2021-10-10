@@ -14,3 +14,6 @@ spring:
     url: jdbc:mysql://localhost:3306/ecommerce
     username: usr
     password: passwd
+
+#ecommerce:
+#  imagesPath: D:/java/FULLSTACK/EcommerceImgs

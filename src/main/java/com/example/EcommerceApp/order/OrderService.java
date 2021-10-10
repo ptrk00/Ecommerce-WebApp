@@ -1,5 +1,6 @@
 package com.example.EcommerceApp.order;
 
+import com.example.EcommerceApp.product.model.CannotBuyOwnProductException;
 import com.example.EcommerceApp.product.model.Product;
 import com.example.EcommerceApp.product.service.ProductService;
 import com.example.EcommerceApp.security.model.User;
@@ -61,4 +62,11 @@ public class OrderService {
         return productService.findProduct(id);
     }
 
+    public void validateProductList(List<Product> productsInCart, User user) {
+        List<Product> userProducts = productService.findByUser(user);
+        for(Product owned : userProducts)
+            for(Product cartP : productsInCart)
+                if(owned.equals(cartP))
+                    throw new CannotBuyOwnProductException("Cannot buy own product. Duplicate id: " + cartP.getId());
+    }
 }
