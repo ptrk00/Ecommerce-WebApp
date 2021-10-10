@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 /*
@@ -23,6 +24,7 @@ import java.util.List;
 public class ProductOrder {
 
     public ProductOrder() {
+        this.products = new LinkedList<>();
     }
 
     public ProductOrder(List<Product> products, ClientData clientData, User user) {
@@ -37,7 +39,6 @@ public class ProductOrder {
 
     @OneToMany
     @JoinColumn(name="order_id")
-    @Size(min = 1)
     private List<Product> products;
 
     private Date orderDate;

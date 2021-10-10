@@ -110,4 +110,11 @@ public class OrderController {
         return "exception";
     }
 
+    @ExceptionHandler(ProductNotAvailableException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public String handleProductNotAvailableException(ProductNotAvailableException e, Model model) {
+        model.addAttribute("errorMsg", e.getMessage());
+        return "exception";
+    }
+
 }

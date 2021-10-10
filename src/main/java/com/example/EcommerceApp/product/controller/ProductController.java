@@ -41,7 +41,8 @@ public class ProductController {
 
         log.info("Received GET Request to /products");
 
-        Iterable<Product> products = productService.findAllProducts();
+       // Iterable<Product> products = productService.findAllProducts();
+        Iterable<Product> products = productService.findAllAvailableProducts();
         model.addAttribute("products", products);
 
         return "products";

@@ -172,8 +172,9 @@ public class ProductControllerIntegrationTest {
                 .flashAttr("product",product))
                 .andExpect(MockMvcResultMatchers.redirectedUrl("/products/"+product.getId()));
 
-        assertThat(productService.findProduct(product.getId())).isEqualTo(product);
-
+        Product found = productService.findProduct(product.getId());
+        assertThat(found).isEqualTo(product);
+      //  assertThat(found.getAvailable()).isTrue();
     }
 
 }

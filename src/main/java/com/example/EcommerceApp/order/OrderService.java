@@ -30,10 +30,11 @@ public class OrderService {
     @Transactional
     public void registerOrder(ProductOrder order, List<Product> productList, User user) {
 
-        // product list cannot be empty
-
+        // handle empty products list
         if(productList.isEmpty())
             throw new OrderWithEmptyCartException("Order must contain at least one product");
+
+        productService.markAllProductsAsUnavailable(productList);
 
         order.setProducts(productList);
         order.setUser(user);
@@ -41,6 +42,7 @@ public class OrderService {
         orderRepository.save(order);
 
     }
+
 
     public Product addProductToCart(Long id, List<Product> productList) {
 
@@ -62,11 +64,17 @@ public class OrderService {
         return productService.findProduct(id);
     }
 
+    // TODO: refactor
     public void validateProductList(List<Product> productsInCart, User user) {
         List<Product> userProducts = productService.findByUser(user);
-        for(Product owned : userProducts)
-            for(Product cartP : productsInCart)
-                if(owned.equals(cartP))
+        for(Product owned : userProducts) {
+            for (Product cartP : productsInCart) {
+                if (owned.equals(cartP))
                     throw new CannotBuyOwnProductException("Cannot buy own product. Duplicate id: " + cartP.getId());
+            }
+        }
+        for(Product cartP : productsInCart)
+            if(!cartP.getAvailable())
+                throw new ProductNotAvailableException("Product with id:" + cartP.getId() + " is not available");
     }
 }

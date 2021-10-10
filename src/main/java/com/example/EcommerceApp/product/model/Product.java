@@ -80,6 +80,7 @@ public class Product {
     public Product() {
         this.ratings = new LinkedList<>();
         this.productAttributes = new LinkedList<>();
+        available = Boolean.TRUE;
     }
 
     @Id
@@ -117,6 +118,8 @@ public class Product {
     @ToString.Exclude
     @ManyToOne
     User seller;
+
+    Boolean available;
 
     public void addRating(ProductRating rating) {
         ratings.add(rating);

@@ -39,6 +39,10 @@ public class ProductService {
         return optProduct.get();
     }
 
+    public Iterable<Product> findAllAvailableProducts() {
+        return productRepository.findByAvailableTrue();
+    }
+
     @Transactional
     public Product registerRating(Long productId, ProductRating productRating, User user) {
         // id is somehow not null, set it to null
@@ -57,6 +61,14 @@ public class ProductService {
         product.setSeller(user);
         user.addOffer(product);
         return productRepository.save(product);
+    }
+
+    @Transactional
+    public void markAllProductsAsUnavailable(List<Product> products) {
+        products.forEach(p -> {
+            p.setAvailable(Boolean.FALSE);
+        });
+        productRepository.saveAll(products);
     }
 
     public void createImgFile(Product product, MultipartFile multipartFile) {
