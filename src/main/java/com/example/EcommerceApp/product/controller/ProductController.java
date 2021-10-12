@@ -2,8 +2,10 @@ package com.example.EcommerceApp.product.controller;
 
 import com.example.EcommerceApp.order.ProductNotFoundException;
 import com.example.EcommerceApp.order.ProductOrder;
+import com.example.EcommerceApp.product.model.CannotHandleFileException;
 import com.example.EcommerceApp.product.model.Product;
 import com.example.EcommerceApp.product.model.ProductRating;
+import com.example.EcommerceApp.product.model.UnknownFileExtensionException;
 import com.example.EcommerceApp.product.service.ProductService;
 import com.example.EcommerceApp.security.model.User;
 import lombok.extern.slf4j.Slf4j;
@@ -104,6 +106,20 @@ public class ProductController {
     @ExceptionHandler(ProductNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleProductNotFoundException(ProductNotFoundException e, Model model) {
+        model.addAttribute("errorMsg",e.getMessage());
+        return "exception";
+    }
+
+    @ExceptionHandler(CannotHandleFileException.class)
+    @ResponseStatus(HttpStatus.FAILED_DEPENDENCY)
+    public String handleCannotHandleFileException(CannotHandleFileException e, Model model) {
+        model.addAttribute("errorMsg",e.getMessage());
+        return "exception";
+    }
+
+    @ExceptionHandler(UnknownFileExtensionException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public String handleUnknownFileExtensionException(UnknownFileExtensionException e, Model model) {
         model.addAttribute("errorMsg",e.getMessage());
         return "exception";
     }

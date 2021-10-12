@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-// TODO: provide a builder
-// TODO: Product should have an Boolean available field
 // TODO: remove product attribute class
 @Entity
 @Data
@@ -125,10 +123,5 @@ public class Product {
         ratings.add(rating);
     }
 
-    // does not work somehow ...
-//    @PostPersist
-//    private void setImgPath() {
-//        imagePath = id + "_" + fullName;
-//    }
 
 }

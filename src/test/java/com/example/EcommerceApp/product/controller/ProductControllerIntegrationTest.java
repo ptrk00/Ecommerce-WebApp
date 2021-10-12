@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.MethodParameter;
@@ -18,26 +19,38 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.support.WebDataBinderFactory;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc
 @DirtiesContext(classMode= DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class ProductControllerIntegrationTest {
+
+    @Value("${app.imagesPath}")
+    private String imagesPath;
 
     private MockMvc mockMvc;
 
@@ -52,6 +65,9 @@ public class ProductControllerIntegrationTest {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    WebApplicationContext webApplicationContext;
 
 
     // user to be injected
@@ -110,9 +126,7 @@ public class ProductControllerIntegrationTest {
 
     @Test
     @Transactional
-    @Disabled
-    // TODO: Circular view path error, its caused because of different mock mvc setup
-    public void should_return_products_view() throws Exception {
+    public void should_return_available_products_view() throws Exception {
 
         // given
 
@@ -126,26 +140,73 @@ public class ProductControllerIntegrationTest {
         product2.setShortDescription("short2 description");
         product2.setFullDescription("full2 description");
 
-        List<Product> productList = List.of(product,product2);
+        // mark this one as unavailable
+        Product product3 = new Product();
+        product3.setAvailable(Boolean.FALSE);
+        product3.setFullName("product3 name");
+        product3.setShortDescription("short3 description");
+        product3.setFullDescription("full3 description");
 
-        Iterable<Product> products = productRepository.saveAll(productList);
+        List<Product> availList = List.of(product,product2);
+        List<Product> allProducts = List.of(product,product2,product3);
+
+        Iterable<Product> products = productRepository.saveAll(allProducts);
+
 
         // when
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/products"))
+        // '/' character at the end of url gets rid of circular view path exception
+        // which may be caused by custom mock mvc setup (?)
+        mockMvc.perform(MockMvcRequestBuilders.get("/products/"))
 
                 // then
 
                 .andExpect(MockMvcResultMatchers.view().name("products"))
-                .andExpect(MockMvcResultMatchers.model().attribute("products",products))
+                .andExpect(MockMvcResultMatchers.model().attribute("products",availList))
                 .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    // this is written as integration test in order to let spring inject
+    // @Value field which contains path to the images
+    @Test
+    @Transactional
+    public void should_generate_file() throws IOException {
+
+        // given
+
+        Product product = new Product();
+        product.setId(1L);
+        product.setFullName("product1");
+        product.setShortDescription("some short description");
+        product.setFullDescription("some fulll description");
+
+        byte[] buff = {0,1,2,3};
+
+        MultipartFile mock = new MockMultipartFile("somerandomname.jpg", buff) {
+            @Override
+            public String getOriginalFilename() {
+                return "somerandomname.jpg";
+            }
+        };
+
+        File file = new File(imagesPath + "/" + product.getId() + "_" + product.getFullName() + ".jpg");
+
+
+        // when
+
+        productService.createImgFile(product,mock);
+
+        // then
+
+        assertThat(file.exists()).isTrue();
+
+        // delete created file
+        Files.delete(file.toPath());
+
     }
 
     @Test
     @WithMockUser
     @Transactional
-    @Disabled
-    // TODO: finish
     public void should_register_new_product() throws Exception {
 
 
@@ -158,23 +219,38 @@ public class ProductControllerIntegrationTest {
         product.setShortDescription("Some random short desc");
         product.setFullDescription("Some random full desc");
 
-
-        MockMultipartFile file = new MockMultipartFile("image",new byte[]{1});
+        byte[] buff = {0,1,2,3};
+        MockMultipartFile file = new MockMultipartFile("image","somerandomname.jpg", "multipart",buff) {
+            @Override
+            public String getOriginalFilename() {
+                return "somerandomname.jpg";
+            }
+        };
 
         // problem with mocking this method
         userRepository.save(user);
 
         // when
 
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/products")
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.multipart("/products")
                 .file(file)
                 .with(csrf())
-                .flashAttr("product",product))
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/products/"+product.getId()));
+                .flashAttr("product", product))
+                .andDo(print());
+//                .andExpect(MockMvcResultMatchers.redirectedUrl("/products/"+product.getId()));
 
-        Product found = productService.findProduct(product.getId());
-        assertThat(found).isEqualTo(product);
-      //  assertThat(found.getAvailable()).isTrue();
+        var all = productService.findAllProducts();
+        assertThat(all).hasSize(1);
+        Product found = productService.findProduct(all.iterator().next().getId());
+
+        File filePath = new File(imagesPath + "/" +found.getId() + "_" + found.getFullName() + ".jpg");
+
+        assertThat(found.getFullName()).isEqualTo(product.getFullName());
+        assertThat(found.getAvailable()).isTrue();
+        assertThat(filePath.exists()).isTrue();
+        assertThat(response.andReturn().getResponse().getRedirectedUrl()).isEqualTo("/products/" + found.getId());
+        // delete created file
+        Files.delete(filePath.toPath());
     }
 
 }

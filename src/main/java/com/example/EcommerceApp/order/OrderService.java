@@ -64,7 +64,6 @@ public class OrderService {
         return productService.findProduct(id);
     }
 
-    // TODO: refactor
     public void validateProductList(List<Product> productsInCart, User user) {
         List<Product> userProducts = productService.findByUser(user);
         for(Product owned : userProducts) {
@@ -73,8 +72,10 @@ public class OrderService {
                     throw new CannotBuyOwnProductException("Cannot buy own product. Duplicate id: " + cartP.getId());
             }
         }
-        for(Product cartP : productsInCart)
-            if(!cartP.getAvailable())
-                throw new ProductNotAvailableException("Product with id:" + cartP.getId() + " is not available");
+
+        productsInCart.forEach(p -> {
+            if(!p.getAvailable())
+                throw new ProductNotAvailableException("Product with id:" + p.getId() + " is not available");
+        });
     }
 }

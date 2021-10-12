@@ -13,6 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -119,8 +121,6 @@ class ProductServiceTest {
     }
 
 
-    // TODO: finish
-
     @Test
     public void should_register_rating() {
 
@@ -145,35 +145,5 @@ class ProductServiceTest {
 
     }
 
-
-    // TODO: write test
-    @Test
-    @Disabled
-    public void should_generate_file() throws IOException {
-
-        // given
-
-        Product product = new Product();
-        product.setId(1L);
-        product.setFullName("product1");
-
-        byte[] buff = {0,1,2,3};
-
-        MultipartFile mock = Mockito.mock(MultipartFile.class);
-        when(mock.getOriginalFilename()).thenReturn("somerandomname.jpg");
-
-
-        // dont allow to actually create a file
-        when(mock.getInputStream()).thenThrow(new IOException());
-
-
-        // when
-
-        productService.createImgFile(product,mock);
-
-        // then
-
-
-    }
 
 }

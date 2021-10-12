@@ -1,12 +1,16 @@
 package com.example.EcommerceApp.product.service;
 
 import com.example.EcommerceApp.order.ProductNotFoundException;
+import com.example.EcommerceApp.product.model.CannotHandleFileException;
 import com.example.EcommerceApp.product.model.Product;
 import com.example.EcommerceApp.product.model.ProductRating;
+import com.example.EcommerceApp.product.model.UnknownFileExtensionException;
 import com.example.EcommerceApp.product.repository.ProductRepository;
 import com.example.EcommerceApp.security.model.User;
 import com.example.EcommerceApp.utils.FileUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,9 +26,12 @@ import java.util.Optional;
 
 
 @Service
-//@ConfigurationProperties(prefix="ecommerce.static")
+@ConfigurationProperties(prefix="application")
 @RequiredArgsConstructor
 public class ProductService {
+
+    @Value("${app.imagesPath}")
+    private String imagesPath;
 
     private final ProductRepository productRepository;
 
@@ -57,7 +64,6 @@ public class ProductService {
     @Transactional
     public Product registerProduct(Product product, User user) {
 
-        // TODO: use @PostPersist to set image path <- not working
         product.setSeller(user);
         user.addOffer(product);
         return productRepository.save(product);
@@ -75,31 +81,31 @@ public class ProductService {
 
         Optional<String> fileExtension = FileUtils.getFileExtension(multipartFile.getOriginalFilename());
 
-        // TODO: handle exception
-
         if(fileExtension.isEmpty())
-            throw new RuntimeException("No file extension");
+            throw new UnknownFileExtensionException("No file extension");
 
-//        String pathname = "src/main/resources/static/images/" +
-//                product.getImagePath() + "." + fileExtension.get();
+        String ext = fileExtension.get();
+        if(!(ext.equals("jpg") || ext.equals("png")))
+            throw new UnknownFileExtensionException("File extension must be jpg or png");
 
         String productPath = product.getId() + "_" + product.getFullName();
-//        String pathname = projectProps.IMAGES_PATH + "\\"+
+
+//        String pathname = "src/main/resources/static/images/" +
 //                productPath + "." + fileExtension.get();
 
-        String pathname = "src/main/resources/static/images/" +
+        String pathname = imagesPath +
                 productPath + "." + fileExtension.get();
 
         product.setImagePath(productPath + "." + fileExtension.get());
         productRepository.save(product);
         File file = new File(pathname);
 
-        // TODO: handle exception
-
         try (InputStream is = multipartFile.getInputStream()) {
             Files.copy(is,file.toPath());
         } catch (IOException e) {
             e.printStackTrace();
+            throw new CannotHandleFileException("Could not create file with original name: "
+                    + multipartFile.getOriginalFilename());
         }
 
     }

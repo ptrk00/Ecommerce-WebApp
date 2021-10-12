@@ -18,19 +18,4 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addViewController("/login").setViewName("login");
     }
 
-    // TODO: serve static from other directory
-    /*
-        things added to solve this
-        1. YamlPropertySourceFactory bean
-        2. ProjectProps
-        3. value in yaml file
-        4. addResourceHandlers in WebConfig bean
-     */
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        log.info("imagesPath: " + props.IMAGES_PATH);
-//        registry.addResourceHandler("/**")
-//                .addResourceLocations("file:/"+props.IMAGES_PATH+"/");
-//    }
-
 }

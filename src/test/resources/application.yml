@@ -13,3 +13,6 @@ spring:
 
   main:
     allow-bean-definition-overriding: true
+
+app:
+  imagesPath: src/test/resources/static/images/

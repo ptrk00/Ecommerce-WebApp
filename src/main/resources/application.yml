@@ -15,5 +15,5 @@ spring:
     username: usr
     password: passwd
 
-#ecommerce:
-#  imagesPath: D:/java/FULLSTACK/EcommerceImgs
+app:
+  imagesPath: src/main/resources/static/images/
