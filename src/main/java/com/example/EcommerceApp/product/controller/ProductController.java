@@ -1,7 +1,6 @@
 package com.example.EcommerceApp.product.controller;
 
 import com.example.EcommerceApp.order.ProductNotFoundException;
-import com.example.EcommerceApp.order.ProductOrder;
 import com.example.EcommerceApp.product.model.CannotHandleFileException;
 import com.example.EcommerceApp.product.model.Product;
 import com.example.EcommerceApp.product.model.ProductRating;
@@ -9,7 +8,8 @@ import com.example.EcommerceApp.product.model.UnknownFileExtensionException;
 import com.example.EcommerceApp.product.service.ProductService;
 import com.example.EcommerceApp.security.model.User;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -17,10 +17,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.tags.form.ErrorsTag;
 
 import javax.validation.Valid;
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @Slf4j
@@ -39,13 +40,27 @@ public class ProductController {
     }
 
     @GetMapping
-    String showAllProducts(Model model) {
+    String showAllAvailableProducts(@RequestParam(required = false) Integer page,
+                                    @RequestParam(required = false) String sortBy,
+                                    @RequestParam(required = false) Sort.Direction sortDir,
+                                    Model model) {
 
-        log.info("Received GET Request to /products");
+        log.info("Received GET Request to /products with params: page=" + page + ", sort=" + sortDir);
+        int pageNum = page != null && page > 0 ? page : 0;
+        String sortByProperty = sortBy != null ? sortBy : "fullName";
+        Sort.Direction sortDirection = sortDir != null ? sortDir : Sort.Direction.ASC;
+        Page<Product> products = productService.findAllAvailableProducts(pageNum, sortByProperty, sortDirection);
 
-       // Iterable<Product> products = productService.findAllProducts();
-        Iterable<Product> products = productService.findAllAvailableProducts();
         model.addAttribute("products", products);
+        int totalPages = products.getTotalPages();
+        if(totalPages > 0) {
+            List<Integer> pageNums = IntStream.rangeClosed(0, totalPages-1).boxed()
+                                        .collect(Collectors.toList());
+            model.addAttribute("pageNums", pageNums);
+        }
+
+        model.addAttribute("sortBy", sortByProperty);
+        model.addAttribute("sortDir", sortDirection);
 
         return "products";
     }

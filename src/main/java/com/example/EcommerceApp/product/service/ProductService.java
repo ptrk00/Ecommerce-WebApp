@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +36,8 @@ public class ProductService {
     @Value("${app.imagesPath}")
     private String imagesPath;
 
+    private Integer PAGE_SIZE = 2;
+
     private final ProductRepository productRepository;
 
     public Iterable<Product> findAllProducts() {
@@ -46,8 +51,8 @@ public class ProductService {
         return optProduct.get();
     }
 
-    public Iterable<Product> findAllAvailableProducts() {
-        return productRepository.findByAvailableTrue();
+    public Page<Product> findAllAvailableProducts(Integer page, String sortBy, Sort.Direction sort) {
+        return productRepository.findByAvailableTrue(PageRequest.of(page,PAGE_SIZE,Sort.by(sort,sortBy)));
     }
 
     @Transactional

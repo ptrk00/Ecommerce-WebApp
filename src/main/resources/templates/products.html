@@ -25,6 +25,18 @@
 <!--        </div>-->
 <!--    </div>-->
 
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+        Sort by
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+        <li><a class="dropdown-item" th:href="@{/products(page=${products.number}, sortBy=fullName, sortDir=ASC)}">name alphabetical</a></li>
+        <li><a class="dropdown-item" th:href="@{/products(page=${products.number}, sortBy=fullName, sortDir=DESC)}">name reverse alphabetical</a></li>
+        <li><a class="dropdown-item" th:href="@{/products(page=${products.number}, sortBy=price, sortDir=ASC)}">price ascending</a></li>
+        <li><a class="dropdown-item"th:href="@{/products(page=${products.number}, sortBy=price, sortDir=DESC)}">price descending</a></li>
+    </ul>
+</div>
+
 <div class="row row-cols-1 row-cols-md-3 g-4">
         <div th:each="product : ${products}">
             <div class="col">
@@ -40,6 +52,27 @@
         </div>
     </div>
 </div>
+
+<nav aria-label="...">
+    <ul class="pagination">
+    <div th:if="${products.totalPages > 0}"
+         th:each="pageNumber : ${pageNums}">
+            <li class="page-item" th:classappend="${pageNumber==products.number} ? active">
+                <a th:href="@{/products(page=${pageNumber}, sortBy=${sortBy}, sortDir=${sortDir})}"
+                   th:text=${pageNumber}
+                   class="page-link">
+                </a>
+            </li>
+    </div>
+    </ul>
+</nav>
+
+<!--<div th:if="${products.totalPages > 0}" class="pagination"-->
+<!--     th:each="pageNumber : ${pageNums}">-->
+<!--    <a th:href="@{/products(page=${pageNumber})}"-->
+<!--       th:text=${pageNumber}-->
+<!--       th:class="${pageNumber==products.number + 1} ? active"></a>-->
+<!--</div>-->
 
 </body>
 </html>

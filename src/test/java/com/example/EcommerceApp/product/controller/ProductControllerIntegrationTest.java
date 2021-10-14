@@ -14,6 +14,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.MethodParameter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
@@ -35,6 +39,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -152,17 +157,19 @@ public class ProductControllerIntegrationTest {
 
         Iterable<Product> products = productRepository.saveAll(allProducts);
 
-
         // when
         // '/' character at the end of url gets rid of circular view path exception
         // which may be caused by custom mock mvc setup (?)
-        mockMvc.perform(MockMvcRequestBuilders.get("/products/"))
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/products/"))
 
                 // then
 
                 .andExpect(MockMvcResultMatchers.view().name("products"))
-                .andExpect(MockMvcResultMatchers.model().attribute("products",availList))
                 .andExpect(MockMvcResultMatchers.status().isOk());
+
+        Page<Product> returned = (Page<Product>) resultActions.andReturn().getModelAndView().getModel().get("products");
+        assertThat(returned.get().collect(Collectors.toList())).hasSize(2);
+        assertThat(returned.get().collect(Collectors.toList())).containsAll(availList);
     }
 
     // this is written as integration test in order to let spring inject

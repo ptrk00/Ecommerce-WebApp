@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Embeddable;
 
-
+// TODO: remove embeddable. this should be relation
 @Embeddable
 @Data
 @NoArgsConstructor

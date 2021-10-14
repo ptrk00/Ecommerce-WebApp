@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 // TODO: remove product attribute class
+// TODO: add Date field, enable sorting by date
 @Entity
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
