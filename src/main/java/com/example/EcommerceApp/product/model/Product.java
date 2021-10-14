@@ -8,7 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,29 +21,29 @@ public class Product {
 
     public Product(String fullName,
                    Double price,
-                   SellerDetails sellerDetails,
+                   ProducerDetails producerDetails,
                    String shortDescription,
                    String fullDescription,
-                   List<ProductRating> ratings,
-                   List<ProductAttribute> productAttributes) {
+                   List<ProductRating> ratings
+                   /*List<ProductAttribute> productAttributes*/) {
         this.fullName = fullName;
         this.price = price;
-        this.sellerDetails = sellerDetails;
+        this.producerDetails = producerDetails;
         this.shortDescription = shortDescription;
         this.fullDescription = fullDescription;
         this.ratings = ratings;
-        this.productAttributes = productAttributes;
+//        this.productAttributes = productAttributes;
     }
 
     public Product(String fullName,
                    Double price,
-                   SellerDetails sellerDetails,
+                   ProducerDetails producerDetails,
                    String shortDescription,
                    String fullDescription,
                    String imagePath) {
         this.fullName = fullName;
         this.price = price;
-        this.sellerDetails = sellerDetails;
+        this.producerDetails = producerDetails;
         this.shortDescription = shortDescription;
         this.fullDescription = fullDescription;
         this.imagePath = imagePath;
@@ -63,13 +63,13 @@ public class Product {
 
     public Product(String fullName,
                    Double price,
-                   SellerDetails sellerDetails,
+                   ProducerDetails producerDetails,
                    String shortDescription,
                    String fullDescription
                   ) {
         this.fullName = fullName;
         this.price = price;
-        this.sellerDetails = sellerDetails;
+        this.producerDetails = producerDetails;
         this.shortDescription = shortDescription;
         this.fullDescription = fullDescription;
     }
@@ -78,7 +78,7 @@ public class Product {
 
     public Product() {
         this.ratings = new LinkedList<>();
-        this.productAttributes = new LinkedList<>();
+//        this.productAttributes = new LinkedList<>();
         available = Boolean.TRUE;
     }
 
@@ -93,7 +93,8 @@ public class Product {
     Double price;
 
     @Embedded
-    SellerDetails sellerDetails;
+    @Nullable
+    ProducerDetails producerDetails;
 
     @Size(max=100, message = "Products short description must be less or equal to 70 characters")
     @NotBlank
@@ -110,15 +111,22 @@ public class Product {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL)
     List<ProductRating> ratings;
 
-    @ToString.Exclude // prevent circular dependency
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL)
-    List<ProductAttribute> productAttributes;
+//    @ToString.Exclude // prevent circular dependency
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL)
+//    List<ProductAttribute> productAttributes;
 
     @ToString.Exclude
     @ManyToOne
     User seller;
 
     Boolean available;
+
+    Date postedOn;
+
+    @PrePersist
+    private void setDate() {
+        postedOn = new Date();
+    }
 
     public void addRating(ProductRating rating) {
         ratings.add(rating);

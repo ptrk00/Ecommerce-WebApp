@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+// TODO: add PUT and DELETE mappings
+
 @Controller
 @Slf4j
 @RequestMapping("/products")

@@ -3,21 +3,14 @@ package com.example.EcommerceApp.product.service;
 import com.example.EcommerceApp.order.ProductNotFoundException;
 import com.example.EcommerceApp.product.model.Product;
 import com.example.EcommerceApp.product.model.ProductRating;
-import com.example.EcommerceApp.product.model.SellerDetails;
 import com.example.EcommerceApp.product.repository.ProductRepository;
 import com.example.EcommerceApp.security.model.User;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
 import java.util.Date;
 import java.util.Optional;
 

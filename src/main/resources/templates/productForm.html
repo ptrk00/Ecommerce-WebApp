@@ -32,20 +32,20 @@
 
         <div class="mb-3 form-check">
             <input type="checkbox" class="form-check-input" data-bs-toggle="collapse" href="#collapseExample" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Sell as company</label>
+            <label class="form-check-label" for="exampleCheck1">Producer details</label>
         </div>
 
         <div class="collapse" id="collapseExample">
             <div class="card card-body">
 
-                <label for="companyName" class="col-sm-2 col-form-label">Company name</label>
-                <input class="form-control" type="text" aria-label="default input example" id="companyName" th:field="${product.sellerDetails.companyName}">
+                <label for="countryName" class="col-sm-2 col-form-label">Country name</label>
+                <input class="form-control" type="text" aria-label="default input example" id="countryName" th:field="${product.producerDetails.country}">
 
-                <label for="headquarters" class="col-sm-2 col-form-label">Company headquarters location</label>
-                <input class="form-control" type="text" aria-label="default input example" id="headquarters" th:field="${product.sellerDetails.companyHeadquartersLocation}">
+                <label for="cityName" class="col-sm-2 col-form-label">City Name</label>
+                <input class="form-control" type="text" aria-label="default input example" id="cityName" th:field="${product.producerDetails.city}">
 
-                <label for="custServiceNumber" class="col-sm-2 col-form-label">Customer service number</label>
-                <input class="form-control" type="text" aria-label="default input example" id="custServiceNumber" th:field="${product.sellerDetails.customerServiceNumber}">
+<!--                <label for="custServiceNumber" class="col-sm-2 col-form-label">Customer service number</label>-->
+<!--                <input class="form-control" type="text" aria-label="default input example" id="custServiceNumber" th:field="${product.sellerDetails.customerServiceNumber}">-->
 
             </div>
         </div>

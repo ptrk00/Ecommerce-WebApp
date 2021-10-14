@@ -1,10 +1,8 @@
 package com.example.EcommerceApp.product.repository;
 
 import com.example.EcommerceApp.product.model.Product;
-import com.example.EcommerceApp.product.model.ProductAttribute;
 import com.example.EcommerceApp.product.model.ProductRating;
-import com.example.EcommerceApp.product.model.SellerDetails;
-import org.junit.jupiter.api.BeforeEach;
+import com.example.EcommerceApp.product.model.ProducerDetails;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +36,7 @@ class ProductRepositoryTest {
 
         Product product = new Product("fullName:))))))",
                 230.0,
-                new SellerDetails("name",
-                        "Polska",
-                        "Cn-121212"),
+                new ProducerDetails("Polska","Kraków"),
                 "short description",
                 "long description");
 
@@ -51,10 +47,10 @@ class ProductRepositoryTest {
                         new Date()),
                 new ProductRating(product,1,"Syf starszny. Szkoada gadać!","X", new Date()));
 
-        List<ProductAttribute> productAttributes = List.of(new ProductAttribute(product,"Stan","Nowy"));
+       // List<ProductAttribute> productAttributes = List.of(new ProductAttribute(product,"Stan","Nowy"));
 
         product.setRatings(productRatingList);
-        product.setProductAttributes(productAttributes);
+       // product.setProductAttributes(productAttributes);
 
         product = productRepository.save(product);
 
@@ -69,7 +65,7 @@ class ProductRepositoryTest {
         // make sure that product's relations are loaded from db correctly
 
         assertThat(retrieved.get().getRatings().get(1).getDescription()).isEqualTo("Syf starszny. Szkoada gadać!");
-        assertThat(retrieved.get().getProductAttributes().get(0).getAttributeName()).isEqualTo("Stan");
+      //  assertThat(retrieved.get().getProductAttributes().get(0).getAttributeName()).isEqualTo("Stan");
     }
 
 }
