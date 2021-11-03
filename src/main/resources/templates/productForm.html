@@ -10,48 +10,57 @@
 </head>
 <body>
 <div th:insert="fragments/navbar :: navbar"></div>
-<form th:action="@{/products}" method="post" th:object="${product}" enctype="multipart/form-data">
-    <div class="mb-3">
-
-        <label for="productName" class="col-sm-2 col-form-label">Name</label>
-        <input class="form-control" type="text" aria-label="default input example" id="productName" th:field="${product.fullName}">
-
-        <label for="shortDesc" class="form-label">Products short description</label>
-        <textarea class="form-control" id="shortDesc" name="description" rows="3" th:field="${product.shortDescription}"></textarea>
-
-        <label for="fullDesc" class="form-label">Products full description</label>
-        <textarea class="form-control" id="fullDesc" name="description" rows="3" th:field="${product.fullDescription}"></textarea>
-
-        <label for="price" class="form-label">Price</label>
-        <input class="form-control" type="text" aria-label="default input example" id="price" th:field="${product.price}">
-
+<div style="width: 650px; margin: 0 auto; padding-top: 100px;">
+    <form th:action="@{/products}" method="post" th:object="${product}" enctype="multipart/form-data">
         <div class="mb-3">
-            <label for="formFile" class="form-label">Add image</label>
-            <input class="form-control" type="file" id="formFile" name="image">
-        </div>
 
-        <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" data-bs-toggle="collapse" href="#collapseExample" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Producer details</label>
-        </div>
+            <label for="productName" class="col-sm-2 col-form-label">Name</label>
+            <input class="form-control" type="text" aria-label="default input example" id="productName"
+                   th:field="${product.fullName}">
 
-        <div class="collapse" id="collapseExample">
-            <div class="card card-body">
+            <label for="shortDesc" class="form-label">Products short description</label>
+            <textarea class="form-control" id="shortDesc" name="description" rows="3"
+                      th:field="${product.shortDescription}"></textarea>
 
-                <label for="countryName" class="col-sm-2 col-form-label">Country name</label>
-                <input class="form-control" type="text" aria-label="default input example" id="countryName" th:field="${product.producerDetails.country}">
+            <label for="fullDesc" class="form-label">Products full description</label>
+            <textarea class="form-control" id="fullDesc" name="description" rows="3"
+                      th:field="${product.fullDescription}"></textarea>
 
-                <label for="cityName" class="col-sm-2 col-form-label">City Name</label>
-                <input class="form-control" type="text" aria-label="default input example" id="cityName" th:field="${product.producerDetails.city}">
+            <label for="price" class="form-label">Price</label>
+            <input class="form-control" type="text" aria-label="default input example" id="price"
+                   th:field="${product.price}">
 
-<!--                <label for="custServiceNumber" class="col-sm-2 col-form-label">Customer service number</label>-->
-<!--                <input class="form-control" type="text" aria-label="default input example" id="custServiceNumber" th:field="${product.sellerDetails.customerServiceNumber}">-->
-
+            <div class="mb-3">
+                <label for="formFile" class="form-label">Add image</label>
+                <input class="form-control" type="file" id="formFile" name="image">
             </div>
-        </div>
 
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" data-bs-toggle="collapse" href="#collapseExample"
+                       id="exampleCheck1">
+                <label class="form-check-label" for="exampleCheck1">Producer details</label>
+            </div>
+
+            <div class="collapse" id="collapseExample">
+                <div class="card card-body">
+
+                    <label for="countryName" class="col-sm-2 col-form-label">Country name</label>
+                    <input class="form-control" type="text" aria-label="default input example" id="countryName"
+                           th:field="${product.producerDetails.country}">
+
+                    <label for="cityName" class="col-sm-2 col-form-label">City Name</label>
+                    <input class="form-control" type="text" aria-label="default input example" id="cityName"
+                           th:field="${product.producerDetails.city}">
+
+                    <!--                <label for="custServiceNumber" class="col-sm-2 col-form-label">Customer service number</label>-->
+                    <!--                <input class="form-control" type="text" aria-label="default input example" id="custServiceNumber" th:field="${product.sellerDetails.customerServiceNumber}">-->
+
+                </div>
+            </div>
+
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
 </body>
 </html>

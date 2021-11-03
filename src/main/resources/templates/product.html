@@ -12,67 +12,68 @@
 
 <div th:insert="fragments/navbar :: navbar"></div>
 
-<div class="card mb-3">
-    <img th:src="@{'/images/' + ${product.imagePath}}" class="card-img-top" alt="...">
-    <div class="card-body">
-        <h5 class="card-title" th:text="${product.fullName}">Card title</h5>
-        <p class="card-text" th:text="${product.fullDescription}"></p>
-        <p class="card-text" th:text="${product.price}"></p>
+<div style="max-width: 800px; margin: 0 auto;">
+    <div class="card mb-3">
+         <img th:src="@{'/images/' + ${product.imagePath}}" class="card-img-top" alt="...">
+<!--        <img src="freeacc.jpg" class="card-img-top" alt="...">-->
+        <div class="card-body">
+            <h5 class="card-title" th:text="${product.fullName}">Card title</h5>
+            <p class="card-text" th:text="${product.fullDescription}"></p>
+            <p class="card-text" th:text="${product.price}"></p>
+        </div>
     </div>
-</div>
+
 
     <form method="POST" th:action="@{/orders/addProduct/{id}(id = ${product.id})}">
-        <button type="submit" class="btn btn-primary mb-3" style="display: block; margin: 0 auto; width: 20%">Add to cart</button>
+        <button type="submit" class="btn btn-primary mb-3" style="display: block; margin: 0 auto; width: 20%">Add to
+            cart</button>
     </form>
 
-<!--<table class="table table-bordered" style="margin: auto; width: 50%">-->
-<!--    <tbody>-->
-<!--    <div th:each="attribute : ${product.productAttributes}">-->
-<!--        <tr>-->
-<!--            <th scope="col" th:text="${attribute.attributeName}">product id</th>-->
-<!--            <th scope="col" th:text="${attribute.attributeValue}">product id</th>-->
-<!--        </tr>-->
-<!--    </div>-->
-<!--    </tbody>-->
-<!--</table>-->
 
-<p>
-    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-        Add comment
-    </button>
-</p>
+    <h4 class="text-muted" style="text-align: center; margin-top: 100px; margin-bottom: 50px;">See what other customers say about this
+        product</h4>
 
-<div class="collapse" id="collapseExample">
-    <div class="card card-body">
-        <form th:action="@{/products/{id}/rating(id = ${product.id})}" method="post" th:object="${newRating}">
-            <select class="form-select" aria-label="Default select example" name="starNum">
-                <option selected>Rate Product</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-                <option value="4">Four</option>
-                <option value="5">Five</option>
-            </select>
-            <div class="mb-3">
-                <label for="comment" class="form-label">Write your comment below</label>
-                <textarea class="form-control" id="comment" name="description" rows="3" th:field="${newRating.description}"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+    <div style="width: 800px; margin: 0 auto; text-align: center;">
+        <p>
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                Add comment
+            </button>
+        </p>
     </div>
-</div>
 
-<div th:each="rating : ${product.ratings}" style="margin-left: 40%; margin-top: 50px">
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title" th:text="${rating.author}">Author</h5>
-            <h6 class="card-subtitle mb-2 text-muted" th:text="${rating.author}">Authore</h6>
-            <p class="card-text" th:text="${rating.description}">Description</p>
-            <p class="card-text"><small class="text-muted" th:text="${rating.postedOn}">date</small></p>
+    <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+            <form th:action="@{/products/{id}/rating(id = ${product.id})}" method="post" th:object="${newRating}">
+                <select class="form-select" aria-label="Default select example" name="starNum">
+                    <option selected>Rate Product</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                    <option value="4">Four</option>
+                    <option value="5">Five</option>
+                </select>
+                <div class="mb-3">
+                    <label for="comment" class="form-label">Write your comment below</label>
+                    <textarea class="form-control" id="comment" name="description" rows="3"
+                              th:field="${newRating.description}"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <div th:each="rating : ${product.ratings}">
+        <div class="card" style="width: 18rem; margin: 0 auto; margin-bottom: 100px; margin-top: 50px;">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${rating.author}">Author</h5>
+                <h6 class="card-subtitle mb-2 text-muted" th:text="${rating.author}">Authore</h6>
+                <p class="card-text" th:text="${rating.description}">Description</p>
+                <p class="card-text"><small class="text-muted" th:text="${rating.postedOn}">date</small></p>
+            </div>
         </div>
     </div>
 </div>
-
 
 </body>
 </html>

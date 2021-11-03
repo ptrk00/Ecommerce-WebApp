@@ -12,8 +12,6 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-// TODO: remove product attribute class
-// TODO: add Date field, enable sorting by date
 @Entity
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -110,10 +108,6 @@ public class Product {
     @ToString.Exclude // prevent circular dependency
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL)
     List<ProductRating> ratings;
-
-//    @ToString.Exclude // prevent circular dependency
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL)
-//    List<ProductAttribute> productAttributes;
 
     @ToString.Exclude
     @ManyToOne

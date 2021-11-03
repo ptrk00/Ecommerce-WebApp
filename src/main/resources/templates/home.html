@@ -6,28 +6,121 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <div th:insert="fragments/bootstrap_includes :: includes"></div>
-
+    <link th:href="@{styles/home-style.css}" rel="stylesheet">
     <title>Ecommerce App</title>
 </head>
 <body>
-<!--<ul class="nav">-->
-<!--    <li class="nav-item">-->
-<!--        <a class="nav-link active" aria-current="page" href="/">Home</a>-->
-<!--    </li>-->
-<!--    <li class="nav-item">-->
-<!--        <a class="nav-link" href="/products">Products</a>-->
-<!--    </li>-->
-<!--    <li class="nav-item">-->
-<!--        <a class="nav-link" href="/orders/cart">My Cart</a>-->
-<!--    </li>-->
-<!--    <li class="nav-item">-->
-<!--        <a class="nav-link" href="#">Login</a>-->
-<!--    </li>-->
-<!--    <li class="nav-item">-->
-<!--        <a class="nav-link">Customer Service</a>-->
-<!--    </li>-->
-<!--</ul>-->
 <div th:insert="fragments/navbar :: navbar"></div>
-    <h1>Welcome</h1>
+
+<div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true"
+                aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+<!--            <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"-->
+<!--                 aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">-->
+<!--                <rect width="100%" height="100%" fill="#777" />-->
+<!--            </svg>-->
+            <img th:src="@{css-images/freeacc.jpg}">
+            <div class="container">
+                <div class="carousel-caption text-start">
+                    <h1>Free account.</h1>
+                    <p>Some representative placeholder content for the first slide of the carousel.</p>
+                    <p><a class="btn btn-lg btn-primary" th:href="@{/register}">Sign up today</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+<!--            <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"-->
+<!--                 aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">-->
+<!--                <rect width="100%" height="100%" fill="#777" />-->
+<!--            </svg>-->
+            <img th:src="@{css-images/happy.jpg}">
+            <div class="container">
+                <div class="carousel-caption">
+                    <h1>More than 98% happy cutomers.</h1>
+                    <p>Some representative placeholder content for the second slide of the carousel.</p>
+                    <p><a class="btn btn-lg btn-primary" href="#">Learn more</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+<!--            <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"-->
+<!--                 aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">-->
+<!--                <rect width="100%" height="100%" fill="#777" />-->
+<!--            </svg>-->
+            <img th:src="@{css-images/product.jpg}">
+            <div class="container">
+                <div class="carousel-caption text-end">
+                    <h1>A lot of interesting products</h1>
+                    <p>Some representative placeholder content for the third slide of this carousel.</p>
+                    <p><a class="btn btn-lg btn-primary" th:href="@{/products}">Browse gallery</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+
+<section class="py-5 text-center container">
+    <div class="row py-lg-5">
+        <div class="col-lg-6 col-md-8 mx-auto">
+            <h1 class="fw-light">Best ecommerce service in 2021</h1>
+            <p class="lead text-muted">Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Aliquam voluptatibus debitis tempore quos, similique sit tempora rem delectus
+                libero soluta ullam qui deleniti tenetur porro beatae, aut architecto voluptas
+                deserunt! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi repudiandae
+                cumque molestias officiis quisquam beatae. </p>
+            <p>
+                <a href="#" class="btn btn-primary my-2">See the report</a>
+            </p>
+        </div>
+    </div>
+</section>
+
+
+<div class="album py-5 bg-light">
+    <div class="container">
+        <h2 class="fw-light" style="text-align: center; padding-bottom: 50px;">See our latest offers</h2>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <div th:each="product : ${products}">
+                <div class="col">
+                    <div class="card">
+                        <img th:src="@{'/images/' + ${product.imagePath}}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${product.fullName}">name</h5>
+                            <p class="card-text" th:text="${product.shortDescription}">short description}</p>
+                            <p class="card-text"><small class="text-muted" th:text="${product.postedOn}"></small></p>
+                            <a href="products.html" class="btn btn-primary my-2" th:href="@{/products/{id}(id = ${product.id})}">Show details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="text-muted py-5">
+    <div class="container">
+        <p class="float-end mb-1">
+            <a href="#">Back to top</a>
+        </p>
+        <p class="mb-1">Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
+        <p class="mb-0">New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a
+                href="/docs/5.0/getting-started/introduction/">getting started guide</a>.</p>
+    </div>
+</footer>
 </body>
 </html>

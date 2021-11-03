@@ -55,6 +55,10 @@ public class ProductService {
         return productRepository.findByAvailableTrue(PageRequest.of(page,PAGE_SIZE,Sort.by(sort,sortBy)));
     }
 
+    public Page<Product> findThreeNewestProducts() {
+        return productRepository.findByAvailableTrue(PageRequest.of(0,3,Sort.by("postedOn")));
+    }
+
     @Transactional
     public Product registerRating(Long productId, ProductRating productRating, User user) {
         // id is somehow not null, set it to null
