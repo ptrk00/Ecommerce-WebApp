@@ -1,5 +1,7 @@
 package com.example.EcommerceApp.product.controller;
 
+import com.example.EcommerceApp.events.OnRegistrationCompleteEvent;
+import com.example.EcommerceApp.events.RegistrationConfirmListener;
 import com.example.EcommerceApp.product.model.Product;
 import com.example.EcommerceApp.product.repository.ProductRepository;
 import com.example.EcommerceApp.product.service.ProductService;
@@ -18,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
@@ -74,6 +77,11 @@ public class ProductControllerIntegrationTest {
     @Autowired
     WebApplicationContext webApplicationContext;
 
+    @Autowired
+    RegistrationConfirmListener registrationConfirmListener;
+
+    @Autowired
+    JavaMailSender sender;
 
     // user to be injected
     private final User user = new User("user1","12345","email@email.com");

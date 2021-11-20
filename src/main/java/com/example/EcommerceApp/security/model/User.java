@@ -39,6 +39,8 @@ public class User implements UserDetails {
     @Email
     private String email;
 
+    private Boolean enabled;
+
     // TODO: fix EAGER fetch type
 
     @ToString.Exclude
@@ -59,6 +61,7 @@ public class User implements UserDetails {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.enabled = false;
         productOrders = new LinkedList<>();
         offers = new LinkedList<>();
     }
@@ -87,6 +90,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }
